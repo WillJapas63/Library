@@ -24,12 +24,8 @@ void limpar_buffer();
 void linhas();
 void registro_livro(struct livro *biblioteca,int *qtd_livros);
 void ver_livros(struct livro *biblioteca, int qtd_livros );
-void emprestimo_livro(struct livro *biblioteca, struct emprestimo *emprestimos, int qtd_livros, int *qtd_emprestimos){
-    NULL;
-}
-void ver_emprestimos(struct livro *biblioteca, struct emprestimo *emprestimos, int qtd_emprestimos){
-    NULL;
-}
+void emprestimo_livro(struct livro *biblioteca, struct emprestimo *emprestimos, int qtd_livros, int *qtd_emprestimos);
+void ver_emprestimos(struct livro *biblioteca, struct emprestimo *emprestimos, int qtd_emprestimos);
 
 
 int main (){
@@ -120,16 +116,62 @@ void registro_livro(struct livro *biblioteca, int *qtd_livros){
 }
 
 void ver_livros(struct livro *biblioteca, int qtd_livros){
-    for (int j = 0; j < qtd_livros; j++){
-        printf("Livro %d\n", j + 1);
-        printf("Nome: %s\n", biblioteca[j].nome);
-        printf("Autor: %s\n", biblioteca[j].autor);
-        printf("Editora: %s\n", biblioteca[j].editora);
-        printf("Edição: %d\n", biblioteca[j].edicao);
-        printf("Status: %s\n", biblioteca[j].disponivel ? "Disponivel" : "Indisponivel");
+    for (int i = 0; i < qtd_livros; i++){
+        printf("Livro %d\n", i + 1);
+        printf("Nome: %s\n", biblioteca[i].nome);
+        printf("Autor: %s\n", biblioteca[i].autor);
+        printf("Editora: %s\n", biblioteca[i].editora);
+        printf("Edição: %d\n", biblioteca[i].edicao);
+        printf("Status: %s\n", biblioteca[i].disponivel ? "Disponivel" : "Indisponivel");
         linhas();
     }
     printf("Pressione Enter para continuar");
     getchar();
 }
 
+void emprestimo_livro(struct livro *biblioteca, struct emprestimo *emprestimos, int qtd_livros, int *qtd_emprestimos){
+    int indice_livro;
+    int checar_livros = 0;
+
+    
+    for (int i = 0; i < qtd_livros; i++){
+        if (!biblioteca[i].disponivel){
+            continue;
+        }else{
+        printf("%d- %s\n", i + 1, biblioteca[i].nome);
+        checar_livros++;
+    }
+}
+    printf("Selecione o livro que você deseja emprestar: ");
+    scanf("%d", &indice_livro);
+    limpar_buffer();
+
+    indice_livro --; 
+
+    if(indice_livro >= 0 && indice_livro < qtd_livros && biblioteca[indice_livro].disponivel ){
+        printf("Coloque algum nome para a retirada do livro: ");
+        fgets(emprestimos[indice_livro].pessoa, max_string, stdin);
+        emprestimos[indice_livro].id_livro = indice_livro;
+        biblioteca[indice_livro].disponivel = 0;
+        printf("Empréstimo realizado com sucesso!\n");
+        printf("Pressione Enter para continuar");
+        getchar();
+        (*qtd_emprestimos)++;
+    }
+}
+
+
+
+
+void ver_emprestimos(struct livro *biblioteca, struct emprestimo *emprestimos, int qtd_emprestimos){
+    if (qtd_emprestimos == 0 ){
+        printf("Nenhum livro foi emprestado ainda\n");
+    }else{
+        for (int i = 0; i < qtd_emprestimos; i++){
+            printf("%d- %s\n",i + 1,biblioteca[i].nome);
+            printf("Nome: %s\n", emprestimos[i].pessoa);
+        }
+    }
+    printf("Pressione Enter para continuar!");
+    getchar();
+}
