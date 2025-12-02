@@ -148,10 +148,12 @@ void emprestimo_livro(struct livro *biblioteca, struct emprestimo *emprestimos, 
 
     indice_livro --; 
 
+
     if(indice_livro >= 0 && indice_livro < qtd_livros && biblioteca[indice_livro].disponivel ){
+        int fadadosdentes = *qtd_emprestimos;
         printf("Coloque algum nome para a retirada do livro: ");
-        fgets(emprestimos[indice_livro].pessoa, max_string, stdin);
-        emprestimos[indice_livro].id_livro = indice_livro;
+        fgets(emprestimos[fadadosdentes].pessoa, max_string, stdin);
+        emprestimos[fadadosdentes].id_livro = indice_livro;
         biblioteca[indice_livro].disponivel = 0;
         printf("Empréstimo realizado com sucesso!\n");
         printf("Pressione Enter para continuar");
@@ -168,7 +170,8 @@ void ver_emprestimos(struct livro *biblioteca, struct emprestimo *emprestimos, i
         printf("Nenhum livro foi emprestado ainda\n");
     }else{
         for (int i = 0; i < qtd_emprestimos; i++){
-            printf("%d- %s\n",i + 1,biblioteca[i].nome);
+            int id_livro = emprestimos[i].id_livro;
+            printf("%d- %s\n", i + 1, biblioteca[id_livro].nome);
             printf("Nome: %s\n", emprestimos[i].pessoa);
         }
     }
